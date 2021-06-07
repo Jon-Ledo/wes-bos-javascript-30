@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>JS Drum Kit</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 
@@ -57,10 +59,55 @@
   <audio data-key="75" src="sounds/tom.wav"></audio>
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
-<script>
+  <script>
 
-</script>
+    // Store the key variables
+    const div = document.querySelector('.keys');
+    //target the unique id's associated with the keys
+
+    // Events >>> key down/up play the associated sound 
+    window.addEventListener('keydown', (e) => {
+      // listen for the _KEYDOWN_ event
+      // We arew trying to listen for KEYCODE associated with the pressed down keys, and play the corresponding sound byte 
+      // If you console log the event, look into the object and you can find values for the 'key' and 'keycode'
+      console.log(e);
+      console.log(e.keyCode);
+
+      // Use an attribute selector (like in CSS) to get the specific DATA-KEY
+      const audio = document.querySelector(`audio[data-key="${e.keyCode}"`);
+
+      // Get the logged key variable so that we can add the class of playing onto it
+      const key = document.querySelector(`.key[data-key="${e.keyCode}"`)
+      key.classList.add('playing');
+
+      if (!audio) return // stop function from running altogether 
+
+      // play method will actually run the sounds!
+      // When you hit the keys, some sounds are longer than others and won't product a sound with rapid keydown events. SO, we make sure to set the current time of the audio to 0
+      audio.currentTime = 0; // rewind to the start
+      audio.play();
+      console.log(key);
+
+    });
+    function removeTransition(event) {
+      // When we log this, it loooks like 6 properties transitioned! We don't care about most of these. So...
+      console.log(event);
+      // SKIP IT IF IT'S NOT A TRANSFORM
+      if (event.propertyName !== 'transform') return;
+
+      console.log(event.propertyName);
+      console.log(this); // equal to the pressed KEY?! 
+      // This is always equalt to the value that was called against it 
+      this.classList.remove('playing');
+    }
+
+    const keys = document.querySelectorAll('.key');
+    // each key gets an event lisentener added to it
+    // when each key is done playing, the transitionend will be used to remove the playing class
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+  </script>
 
 
 </body>
+
 </html>
