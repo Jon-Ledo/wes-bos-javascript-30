@@ -1,19 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>HTML5 Canvas</title>
 </head>
-<body>
-<canvas id="draw" width="800" height="800"></canvas>
-<script>
-</script>
 
-<style>
-  html, body {
-    margin: 0;
-  }
-</style>
+<body>
+  <!-- CANVAS element -->
+  <canvas id="draw" width="800" height="800"></canvas>
+  <script>
+
+    const canvas = document.querySelector('#draw');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    // When you draw on something there needs to be a colour, and theen also the end of the line should it be squared off, or rouded? 
+    ctx.strokeStyle = '#BADA55';
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+
+    // dummy variables
+    // like a flag, so when we click down we set it to true, and when we click up it is set to false. This flag will let the DOM know when to draw on the canvas 
+    let isDrawing = false;
+
+    // when you draw to a canvas, you need a starting X and Y, and an ending X and Y. 
+    //Line needs a start and a stop
+    let lastX = 0;
+    let lastY = 0;
+
+    function draw(e) {
+      // track the event (mouse over) to see what it;s doing!
+      // console.log(e);
+      if (!isDrawing) return; // this will stop the function from running when they are NOT mousae pressed down
+      console.log(e);
+
+      ctx.beginPath();
+      // start from
+      ctx.moveTo(lastX, lastY);
+      // go to
+      ctx.lineTo(e.offsetX, e.offsetY);
+      // wont' see anything on screen until we log stroke
+      ctx.stroke();
+
+      // [lastX, lastY] = [e.offsetX, e.offsetY]
+      lastX = e.offsetX;
+      lastY = e.offsetY;
+    }
+
+    // whenever the cursor moves on canvas, fires the event
+    canvas.addEventListener('mousemove', draw);
+    // whenever mouse button is held down, fire the event
+    // set isDrawing to true
+    canvas.addEventListener('mousedown', () => isDrawing = true);
+    // whenever mouse button is released, set isDrawing to false
+    canvas.addEventListener('mouseup', () => isDrawing = false);
+    // if the mouse leaves the window and you let go, it recognizes that you are no longer holding it down
+    canvas.addEventListener('mouseout', () => isDrawing = false);
+
+  </script>
+
+  <style>
+    html,
+    body {
+      margin: 0;
+    }
+  </style>
 
 </body>
+
 </html>
