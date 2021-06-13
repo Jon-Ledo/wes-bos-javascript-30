@@ -20,6 +20,7 @@
     ctx.strokeStyle = '#BADA55';
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
+    ctx.lineWidth = 100;
 
     // dummy variables
     // like a flag, so when we click down we set it to true, and when we click up it is set to false. This flag will let the DOM know when to draw on the canvas 
@@ -27,15 +28,18 @@
 
     // when you draw to a canvas, you need a starting X and Y, and an ending X and Y. 
     //Line needs a start and a stop
-    let lastX = 0;
-    let lastY = 0;
+    let lastX = 0; // initial value
+    let lastY = 0; // initial value
+
+    let hue = 0;
+    let direction = true;
 
     function draw(e) {
       // track the event (mouse over) to see what it;s doing!
       // console.log(e);
       if (!isDrawing) return; // this will stop the function from running when they are NOT mousae pressed down
       console.log(e);
-
+      ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`
       ctx.beginPath();
       // start from
       ctx.moveTo(lastX, lastY);
@@ -47,13 +51,35 @@
       // [lastX, lastY] = [e.offsetX, e.offsetY]
       lastX = e.offsetX;
       lastY = e.offsetY;
+      hue++;
+      if (hue >= 360) {
+        hue = 0;
+      }
+
+      if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+        direction = !direction;
+      }
+
+      if (direction) {
+        ctx.lineWidth++;
+      } else {
+        ctx.lineWidth--;
+      }
+
     }
 
     // whenever the cursor moves on canvas, fires the event
     canvas.addEventListener('mousemove', draw);
     // whenever mouse button is held down, fire the event
     // set isDrawing to true
-    canvas.addEventListener('mousedown', () => isDrawing = true);
+    canvas.addEventListener('mousedown', (e) => {
+      isDrawing = true;
+      [lastX, lastY] = [e.offsetX, e.offsetY]
+
+    });
+
+
+
     // whenever mouse button is released, set isDrawing to false
     canvas.addEventListener('mouseup', () => isDrawing = false);
     // if the mouse leaves the window and you let go, it recognizes that you are no longer holding it down
