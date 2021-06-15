@@ -1,22 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>JS Reference VS Copy</title>
 </head>
+
 <body>
 
   <script>
     // start with strings, numbers and booleans
+    let age = 100;
+    let age2 = age;
+    console.log(age, age2); // 100, 100
+    age = 200;
+    console.log(age, age2); // 200, 100
 
     // Let's say we have an array
     const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
 
     // and we want to make a copy of it.
+    const team = players;
+
+    console.log(players, team);
 
     // You might think we can just do something like this:
+    team[3] = 'Lux';
 
     // however what happens when we update that array?
+    console.log(team); // []... "lux"]
+    console.log(players); // []... "lux"] also was changed! 
+    // Team is not the array, but just a reference to the original array of players 
+    // Whenever you update the original array, the refercne will always go back to see what the values will be 
 
     // now here is the problem!
 
@@ -53,4 +68,5 @@
   </script>
 
 </body>
+
 </html>
