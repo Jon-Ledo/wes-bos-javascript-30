@@ -33,19 +33,19 @@
     // Team is not the array, but just a reference to the original array of players 
     // Whenever you update the original array, the refercne will always go back to see what the values will be 
 
-    // now here is the problem!
-
-    // oh no - we have edited the original array too!
-
     // Why? It's because that is an array reference, not an array copy. They both point to the same array!
-
     // So, how do we fix this? We take a copy instead!
-
-    // one way
+    const team2 = players.slice();
+    // if you pass in nothing into slice, it will return a copy of the entire array
 
     // or create a new array and concat the old one in
+    const team4 = [].concat(players);
 
     // or use the new ES6 Spread
+    const team3 = [...team2];
+
+    // Or use the Array.from( method)
+    const team5 = Array.from(players)
 
     // now when we update it, the original one isn't changed
 
@@ -58,12 +58,49 @@
     };
 
     // and think we make a copy:
+    const captain = person;
+    // captain.number = 99;
+    console.table(person); // does not work, ust like before it takes a referene 
 
     // how do we take a copy instead?
+    // pass in 
+    const cap2 = Object.assign({}, person, { number: 99, age: 12 });
+    console.log(cap2); // copied object
+    console.log(person); // no added number prop
 
     // We will hopefully soon see the object ...spread
+    const cap3 = { ...person };
+    console.log(cap3);
+    // this is a SHALLOW COPY
 
-    // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+    // meaning? 
+    // This is only 1 level deep - both for Arrays and Objects. 
+
+    const wes = {
+      name: 'wes',
+      age: 30,
+      social: {
+        twitter: '@twitter',
+        instagram: 'insta'
+      }
+    }
+    console.log(wes);
+    const wes2 = Object.assign({}, wes);
+    wes2.name = 'Wesley';
+    // console.log(wes2);
+
+    wes2.social.twitter = "@coolman2000";
+    console.log(wes2);
+    // This is what we mean by shallow copy. Now, if we change the nested object in the copy, it alters the orignal as well!
+
+    const wes3 = JSON.parse(JSON.stringify(wes));
+    // JSON.stringify(wes) takes the object and makes everything into a string. JSON.parse(...) then takes that string and parses it into the object
+    wes3.social.twitter = "@coolman3000";
+    console.log(wes);
+    console.log(wes3);
+
+    //lodash has a cloneDeep method (you can google), but you should think twice before using it.
+    // very rarrely do you ever need to clone an object that deep. 
 
   </script>
 
